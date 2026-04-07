@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Классификатор услуг ремонта</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --border: #e8eaed;
+    --text: #1a1a2e;
+    --text-secondary: #6b7280;
+    --accent: #0091d5;
+    --accent-hover: #007ab8;
+    --accent-light: #e6f4fb;
+    --success: #10b981;
+    --success-light: #ecfdf5;
+    --success-border: #a7f3d0;
+    --danger: #ef4444;
+    --danger-light: #fef2f2;
+    --danger-border: #fecaca;
+    --warn: #f59e0b;
+    --warn-light: #fffbeb;
+    --warn-border: #fde68a;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === HEADER === */
+  .header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .header-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 16px;
+  }
+  .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+  .logo-text span { color: var(--accent); }
+  .header-meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex; gap: 16px;
+  }
+  .header-meta-item {
+    display: flex; align-items: center; gap: 4px;
+  }
+  .header-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+
+  /* === MAIN === */
+  .container { max-width: 920px; margin: 28px auto; padding: 0 24px; }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  /* === INPUT === */
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    color: var(--text);
+    background: var(--bg);
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,145,213,0.1);
+    background: #fff;
+  }
+  textarea::placeholder { color: #b0b8c4; }
+
+  .controls { display: flex; gap: 12px; align-items: flex-end; margin-top: 14px; flex-wrap: wrap; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+  .field select {
+    padding: 9px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .field select:focus { outline: none; border-color: var(--accent); }
+
+  .examples { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 14px; }
+  .examples-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .ex-btn {
+    padding: 5px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-secondary);
+    background: transparent;
+    transition: all 0.15s;
+  }
+  .ex-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+  .submit-row { display: flex; gap: 12px; align-items: center; margin-top: 18px; }
+  .btn {
+    padding: 11px 28px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: -0.2px;
+  }
+  .btn:hover { background: var(--accent-hover); box-shadow: 0 4px 16px rgba(0,145,213,0.25); }
+  .btn:disabled { background: #d1d5db; cursor: not-allowed; box-shadow: none; }
+
+  .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .status-text { font-size: 13px; color: var(--text-secondary); }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  .error-banner {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--danger-light);
+    border: 1px solid var(--danger-border);
+    border-radius: var(--radius-sm);
+    color: #991b1b;
+    font-size: 13px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .error-banner.show { display: flex; }
+  .retry-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--danger-border);
+    background: #fff;
+    color: #991b1b;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .retry-btn:hover { background: var(--danger-light); }
+
+  .skeleton {
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--border) 25%, #f2f4f7 50%, var(--border) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+  .skeleton-row { display: flex; gap: 8px; }
+  .skeleton-row .skeleton:nth-child(1) { width: 140px; }
+  .skeleton-row .skeleton:nth-child(2) { width: 110px; }
+  .skeleton-row .skeleton:nth-child(3) { width: 165px; }
+  .hint { font-size: 11px; color: #c0c6cf; margin-top: 8px; }
+
+  /* === RESULTS === */
+  .results { display: none; }
+  .results.show { display: block; animation: fadeUp 0.35s ease-out; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    position: relative;
+    cursor: default;
+    transition: transform 0.15s;
+    letter-spacing: -0.1px;
+  }
+  .tag:hover { transform: translateY(-1px); }
+  .tag-detected { background: var(--accent-light); color: var(--accent); border: 1px solid #b3ddf0; }
+  .tag-confirmed { background: var(--success-light); color: #065f46; border: 1px solid var(--success-border); }
+  .tag-removed { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger-border); text-decoration: line-through; opacity: 0.6; }
+
+  .tag .badge {
+    position: absolute; top: -5px; right: -5px;
+    background: var(--success); color: #fff;
+    font-size: 8px; padding: 1px 5px; border-radius: 6px; font-weight: 800;
+  }
+  .tag .badge-removed { background: var(--danger); }
+
+  .phrase-tooltip {
+    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    background: var(--text); color: #fff;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 11px; font-weight: 400;
+    z-index: 10; max-width: 300px; white-space: normal; line-height: 1.5;
+    box-shadow: var(--shadow-lg);
+    pointer-events: none;
+  }
+  .phrase-tooltip::before {
+    content: ''; position: absolute; top: -4px; left: 16px;
+    width: 8px; height: 8px; background: var(--text);
+    transform: rotate(45deg);
+  }
+  .tag:hover .phrase-tooltip { display: block; }
+
+  .legend { display: flex; gap: 14px; margin-top: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-secondary); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 3px; }
+
+  /* Removed section */
+  .removed-section {
+    margin-top: 14px; padding: 14px 16px;
+    background: var(--danger-light);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--danger-border);
+  }
+  .removed-section h3 { font-size: 11px; color: var(--danger); margin-bottom: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* Split badge */
+  .split-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+  }
+  .split-yes { background: var(--success-light); color: #065f46; border: 1px solid var(--success-border); }
+  .split-no { background: var(--warn-light); color: #92400e; border: 1px solid var(--warn-border); }
+  .no-results { color: var(--text-secondary); font-size: 13px; }
+
+  /* Drafts */
+  .draft {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    margin-top: 10px;
+    transition: box-shadow 0.2s;
+  }
+  .draft:hover { box-shadow: var(--shadow-md); }
+  .draft-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .draft-mc {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 5px;
+  }
+  .draft-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .draft-text { font-size: 13px; line-height: 1.7; color: #4b5563; white-space: pre-wrap; }
+
+  /* Pipeline */
+  .pipeline { display: flex; align-items: stretch; gap: 3px; margin-top: 4px; }
+  .pipe-step {
+    flex: 1;
+    text-align: center;
+    padding: 14px 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+  }
+  .pipe-step.done { background: var(--success-light); border-color: var(--success-border); }
+  .pipe-step.skipped { opacity: 0.35; }
+  .pipe-step .step-label { font-size: 10px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .pipe-step .step-name { font-size: 11px; color: var(--text); margin-top: 3px; font-weight: 500; }
+  .pipe-step .step-val { font-size: 20px; font-weight: 800; color: var(--accent); margin-top: 5px; letter-spacing: -0.5px; }
+  .pipe-step.done .step-val { color: #059669; }
+  .pipe-step .step-meta { font-size: 9px; color: var(--text-secondary); margin-top: 3px; font-weight: 500; }
+  .pipe-arrow { display: flex; align-items: center; color: #d1d5db; font-size: 14px; padding: 0 1px; }
+
+  @media (max-width: 640px) {
+    .header-meta { display: none; }
+    .container { padding: 0 12px; }
+    .card { padding: 20px; border-radius: 12px; }
+    .pipeline { flex-direction: column; gap: 6px; }
+    .pipe-arrow { transform: rotate(90deg); justify-content: center; }
+    .controls { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">SC</div>
+      <div class="logo-text">Service <span>Classifier</span></div>
+    </div>
+    <div class="header-meta">
+      <div class="header-meta-item"><div class="header-dot"></div> <span id="metaApi">проверяем API</span></div>
+      <div class="header-meta-item" id="metaSplit"></div>
+      <div class="header-meta-item" id="metaLlm"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="card-title">Текст объявления</div>
+    <textarea id="input" placeholder="Вставьте текст объявления из категории «Ремонт и отделка»..."></textarea>
+
+    <div class="controls">
+      <div class="field">
+        <span class="field-label">Микрокатегория</span>
+        <select id="mcSelect">
+          <option value="101">101 — Ремонт квартир и домов под ключ</option>
+          <option value="102">102 — Сантехника</option>
+          <option value="103">103 — Электрика</option>
+          <option value="104">104 — Натяжные потолки</option>
+          <option value="105">105 — Укладка плитки</option>
+          <option value="106">106 — Поклейка обоев</option>
+          <option value="107">107 — Малярные работы</option>
+          <option value="108">108 — Штукатурные работы</option>
+          <option value="109">109 — Напольные покрытия</option>
+          <option value="110">110 — Гипсокартон</option>
+          <option value="111">111 — Демонтажные работы</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="examples">
+      <span class="examples-label">Примеры</span>
+      <button class="ex-btn" onclick="setExample(0)">Мастер-специалист</button>
+      <button class="ex-btn" onclick="setExample(1)">Ремонт под ключ</button>
+      <button class="ex-btn" onclick="setExample(2)">Чистый демонтаж</button>
+      <button class="ex-btn" onclick="setExample(3)">Плитка + штукатурка</button>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn" id="analyzeBtn" onclick="analyze()">Анализировать</button>
+      <div class="spinner" id="spinner"></div>
+      <span class="status-text" id="status"></span>
+    </div>
+    <div class="hint">Ctrl + Enter</div>
+
+    <div class="error-banner" id="errorBanner">
+      <span id="errorText"></span>
+      <button class="retry-btn" type="button" id="retryBtn">Повторить</button>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+
+    <div class="card">
+      <div class="card-title">Обнаруженные микрокатегории</div>
+      <div class="tags" id="detectedTags"></div>
+      <div class="skeleton-row" id="detectedSkeleton" style="display:none;">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+
+      <div class="legend" id="legend" style="display:none;">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent-light);border:1px solid #b3ddf0;"></div> Keywords</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--success-light);border:1px solid var(--success-border);"></div> LLM Verified</div>
+        <div class="legend-item" id="legendRemoved" style="display:none;"><div class="legend-dot" style="background:var(--danger-light);border:1px solid var(--danger-border);"></div> Rejected</div>
+      </div>
+
+      <div id="removedSection" class="removed-section" style="display:none;">
+        <h3>Отклонено LLM-верификацией</h3>
+        <div class="tags" id="removedTags"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="card-title">Решение о разделении</div>
+      <div id="splitBadge"></div>
+    </div>
+
+    <div class="card" id="draftsCard" style="display:none;">
+      <div class="card-title">Черновики объявлений</div>
+      <div id="draftsContainer"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Pipeline</div>
+      <div class="pipeline" id="pipelineInfo"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const CATEGORIES = {
+  101:"Ремонт квартир и домов под ключ",102:"Сантехника",103:"Электрика",
+  104:"Натяжные потолки",105:"Укладка плитки",106:"Поклейка обоев",
+  107:"Малярные работы",108:"Штукатурные работы",109:"Напольные покрытия",
+  110:"Гипсокартон",111:"Демонтажные работы"
+};
+
+const EXAMPLES = [
+  {text:"Штукатурка, шпаклёвка, поклейка обоев, укладка ламината, плиточные работы. Опыт 12 лет. Работаю отдельно по каждому виду. Звоните!",mc:101},
+  {text:"Профессиональный ремонт квартир под ключ! Наша бригада выполнит все виды отделочных работ: от демонтажа до чистовой отделки. Штукатурка, плитка, электрика, сантехника. Гарантия качества 3 года.",mc:101},
+  {text:"Демонтаж, под ключ. Демонтаж квартир. Демонтаж домов. Снос ветхих сооружений. Мы самостоятельная бригада, которая предоставляет услуги по демонтажу, сносу стен, кафеля, пола, стяжки. ДЕМОНТАЖ, СЛОМ, СНОС: демонтаж стен, перегородок; демонтаж потолка; демонтаж штукатурки; демонтаж обоев; демонтаж паркета, ламината, линолеума; демонтаж плитки, кафеля, керамогранита; демонтаж гипсокартонных конструкций.",mc:101},
+  {text:"Укладка плитки любой сложности. Демонтаж старой плитки. Штукатурка стен по маякам, выравнивание поверхностей. Опыт 10 лет. Гарантия.",mc:101}
+];
+
+function setExample(i){document.getElementById('input').value=EXAMPLES[i].text;document.getElementById('mcSelect').value=EXAMPLES[i].mc;}
+
+function makeTag(id,title,phrases,verification){
+  const el=document.createElement('span');
+  let cls='tag ';
+  if(verification==='removed')cls+='tag-removed';
+  else if(verification==='confirmed'||verification==='added')cls+='tag-confirmed';
+  else cls+='tag-detected';
+  el.className=cls;
+  el.textContent=`[${id}] ${title}`;
+
+  if(verification==='added'){const b=document.createElement('span');b.className='badge';b.textContent='LLM+';el.appendChild(b);}
+  else if(verification==='confirmed'){const b=document.createElement('span');b.className='badge';b.innerHTML='&#10003;';el.appendChild(b);}
+  else if(verification==='removed'){const b=document.createElement('span');b.className='badge badge-removed';b.innerHTML='&#10007;';el.appendChild(b);}
+
+  if(phrases&&phrases.length>0){
+    const t=document.createElement('div');t.className='phrase-tooltip';
+    t.textContent=phrases.slice(0,5).join(', ');
+    if(phrases.length>5)t.textContent+='...';
+    el.appendChild(t);el.style.cursor='help';
+  }
+  return el;
+}
+
+let health = null;
+
+async function loadHealth(){
+  const api = document.getElementById('metaApi');
+  try{
+    const resp = await fetch('/health');
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    health = await resp.json();
+    api.textContent = 'API готов';
+    document.getElementById('metaSplit').textContent = 'Stage 2: ' + health.splitMode;
+    document.getElementById('metaLlm').textContent = 'LLM: ' + health.llm;
+  }catch(err){
+    api.textContent = 'API недоступен';
+  }
+}
+
+function showError(message){
+  const banner = document.getElementById('errorBanner');
+  document.getElementById('errorText').textContent = message;
+  banner.classList.add('show');
+}
+
+function hideError(){
+  document.getElementById('errorBanner').classList.remove('show');
+}
+
+function stageMeta(stage){
+  if(!health) return '';
+  if(stage === 'verify') return health.verificationModel;
+  if(stage === 'draft') return health.draftModel;
+  return health.splitMode;
+}
+
+async function analyze(){
+  const text=document.getElementById('input').value.trim();
+  if(!text){showError('Вставьте текст объявления.');return;}
+  hideError();
+  const sel=document.getElementById('mcSelect');
+  const mcId=parseInt(sel.value);
+  const mcTitle=sel.options[sel.selectedIndex].text.split(' — ')[1]||'';
+  const btn=document.getElementById('analyzeBtn');
+  const spinner=document.getElementById('spinner');
+  const status=document.getElementById('status');
+  const skeleton=document.getElementById('detectedSkeleton');
+
+  btn.disabled=true;spinner.style.display='block';status.textContent='Анализируем...';
+  document.getElementById('results').className='results show';
+  document.getElementById('detectedTags').innerHTML='';
+  skeleton.style.display='flex';
+
+  const t0=performance.now();
+  try{
+    const resp=await fetch('/process?details=true',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({itemId:1,mcId,mcTitle,description:text})});
+    const elapsed=((performance.now()-t0)/1000).toFixed(1);
+    if(!resp.ok)throw new Error('Сервер ответил HTTP '+resp.status);
+    const data=await resp.json();
+
+    const nDet=(data.detectedMcIds||[]).length;
+    const nRem=(data.removedByVerification||[]).length;
+    const nDr=(data.drafts||[]).length;
+    const hasV=nRem>0||(data.detectionDetails||[]).some(d=>d.verification);
+
+    skeleton.style.display='none';
+    const tagsEl=document.getElementById('detectedTags');tagsEl.innerHTML='';
+    if(data.detectionDetails&&data.detectionDetails.length>0){
+      data.detectionDetails.forEach(d=>tagsEl.appendChild(makeTag(d.mcId,CATEGORIES[d.mcId]||d.mcTitle,d.matchedPhrases,d.verification)));
+    }else if(nDet>0){
+      data.detectedMcIds.forEach(id=>tagsEl.appendChild(makeTag(id,CATEGORIES[id]||id,[],'')));
+    }else{tagsEl.innerHTML='<span class="no-results">Дополнительных микрокатегорий не обнаружено — объявление описывает одну услугу.</span>';}
+
+    document.getElementById('legend').style.display=nDet>0?'flex':'none';
+    document.getElementById('legendRemoved').style.display=nRem>0?'flex':'none';
+
+    const rs=document.getElementById('removedSection');const rt=document.getElementById('removedTags');rt.innerHTML='';
+    if(nRem>0){rs.style.display='block';data.removedByVerification.forEach(d=>rt.appendChild(makeTag(d.mcId,CATEGORIES[d.mcId]||d.mcTitle,d.matchedPhrases,'removed')));}
+    else{rs.style.display='none';}
+
+    const se=document.getElementById('splitBadge');
+    if(nDet===0)se.innerHTML='<span class="split-badge split-no">Нет категорий для разделения</span>';
+    else if(data.shouldSplit)se.innerHTML='<span class="split-badge split-yes">Рекомендуется создать отдельные объявления</span>';
+    else se.innerHTML='<span class="split-badge split-no">Разделение не требуется</span>';
+
+    const dc=document.getElementById('draftsCard');const dcon=document.getElementById('draftsContainer');dcon.innerHTML='';
+    if(nDr>0){dc.style.display='block';data.drafts.forEach(d=>{
+      const div=document.createElement('div');div.className='draft';
+      const fallback=d.fallback?'<div class="step-meta">Шаблон: LLM недоступна</div>':'';
+      div.innerHTML='<div class="draft-header"><span class="draft-mc">'+d.mcId+'</span><span class="draft-title">'+escapeHtml(d.mcTitle)+'</span></div>'+fallback+'<div class="draft-text">'+escapeHtml(d.text)+'</div>';
+      dcon.appendChild(div);
+    });}else{dc.style.display='none';}
+
+    document.getElementById('pipelineInfo').innerHTML=
+      '<div class="pipe-step done"><div class="step-label">Stage 1</div><div class="step-name">Keywords</div><div class="step-val">'+(nDet+nRem)+'</div><div class="step-meta">pymorphy3 + rapidfuzz</div></div>'+
+      '<div class="pipe-arrow">&rarr;</div>'+
+      '<div class="pipe-step '+(hasV?'done':'skipped')+'"><div class="step-label">Stage 1.5</div><div class="step-name">LLM Verify</div><div class="step-val">'+(hasV?'&minus;'+nRem:'&mdash;')+'</div><div class="step-meta">'+(hasV?stageMeta('verify'):'пропущена')+'</div></div>'+
+      '<div class="pipe-arrow">&rarr;</div>'+
+      '<div class="pipe-step done"><div class="step-label">Stage 2</div><div class="step-name">Split</div><div class="step-val">'+(data.shouldSplit?'Да':'Нет')+'</div><div class="step-meta">'+stageMeta('split')+'</div></div>'+
+      '<div class="pipe-arrow">&rarr;</div>'+
+      '<div class="pipe-step '+(nDr>0?'done':'skipped')+'"><div class="step-label">Stage 3</div><div class="step-name">Drafts</div><div class="step-val">'+(nDr>0?nDr:'&mdash;')+'</div><div class="step-meta">'+(nDr>0?stageMeta('draft'):'пропущена')+'</div></div>';
+
+    status.textContent=elapsed+' с';
+  }catch(err){
+    skeleton.style.display='none';
+    status.textContent='';
+    showError(err.message);
+  }
+  finally{btn.disabled=false;spinner.style.display='none';}
+}
+
+function escapeHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+document.getElementById('input').addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')analyze();});
+document.getElementById('retryBtn').addEventListener('click',analyze);
+loadHealth();
+</script>
+</body>
+</html>
