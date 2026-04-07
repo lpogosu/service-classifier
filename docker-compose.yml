@@ -1,0 +1,20 @@
+services:
+  api:
+    build: .
+    image: service-classifier:latest
+    container_name: service-classifier
+    ports:
+      - "8000:8000"
+    environment:
+      # Без ключа сервис поднимется в offline-режиме: детекция и решение
+      # о разделении работают, черновики собираются по шаблону.
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      VERIFICATION_MODEL: ${VERIFICATION_MODEL:-qwen/qwen3-235b-a22b-2507}
+      DRAFT_MODEL: ${DRAFT_MODEL:-google/gemini-2.0-flash-001}
+      KEYPHRASES_PATH: /app/data/key_phrases.csv
+      SPLIT_MODEL_PATH: /app/models/split_classifier.pkl
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      # Классификатор — артефакт `make train`, в образ не запекается.
+      - ./models:/app/models:ro
+    restart: unless-stopped
